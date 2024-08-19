@@ -103,7 +103,7 @@ export function OrdersList({ cakes, searchParams }: OrdersListProps) {
             orders.map((order) => {
               return (
                 <TableRow key={order.id}>
-                  <TableCell>{order.amount}</TableCell>
+                  <TableCell>R$ {order.amount}</TableCell>
                   <TableCell>
                     R$ {calculateBenefitAndRevenue(order.amount).benefit}
                   </TableCell>

@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createCake } from '@/http/create-cake'
 import { toast } from 'sonner'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 const cakeSchema = z.object({
   flavor: z.string().min(1, { message: 'Campo obrigatório' }),
@@ -21,8 +22,17 @@ const cakeSchema = z.object({
 type CakeFormData = z.infer<typeof cakeSchema>
 
 export function FormCreateCake() {
+  const queryClient = useQueryClient()
+
   const { register, handleSubmit } = useForm<CakeFormData>({
     resolver: zodResolver(cakeSchema),
+  })
+
+  const { mutateAsync: createCakeFn } = useMutation({
+    mutationFn: createCake,
+    onSuccess: () => {
+      queryClient.refetchQueries({ queryKey: ['cakes'], type: 'active' })
+    },
   })
 
   async function handleCreateCake(data: CakeFormData) {
@@ -37,7 +47,7 @@ export function FormCreateCake() {
     } = data
 
     try {
-      await createCake({
+      await createCakeFn({
         flavor,
         filling,
         description,
