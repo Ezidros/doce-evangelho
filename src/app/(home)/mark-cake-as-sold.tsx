@@ -5,7 +5,11 @@ import { markCakeAsSold } from '@/http/mark-cake-as-sold'
 import { MinusCircle } from 'lucide-react'
 import { toast } from 'sonner'
 
-export function MarkCakeAsSold({ cakeId }: { cakeId: string }) {
+interface MarkAsSoldProps {
+  cakeId: string
+}
+
+export function MarkCakeAsSold({ cakeId }: MarkAsSoldProps) {
   async function SoldCake() {
     await markCakeAsSold(cakeId)
       .then(() => toast.success('Parabens por mais uma venda!'))

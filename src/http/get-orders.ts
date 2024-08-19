@@ -1,6 +1,6 @@
 import { api } from './api-client'
 
-interface GetOrdersResponse {
+export interface GetOrdersResponse {
   orders: {
     id: string
     amount: string
@@ -12,8 +12,13 @@ interface GetOrdersResponse {
   }[]
 }
 
-export async function getOrders() {
-  const result = await api.get<GetOrdersResponse>('/fetch/orders')
+export async function getOrders(page: number = 1, limit: number = 10) {
+  const result = await api.get<GetOrdersResponse>('/fetch/orders', {
+    params: {
+      page,
+      limit,
+    },
+  })
 
   return result.data
 }

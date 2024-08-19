@@ -57,7 +57,6 @@ export default async function Home() {
 
                     <AddCake
                       cakeId={cake.id}
-                      quantity={cake.quantity}
                       flavor={cake.flavor}
                       filling={cake.filling}
                     />

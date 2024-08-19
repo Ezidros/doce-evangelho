@@ -1,6 +1,6 @@
 import { api } from './api-client'
 
-interface GetCakesResponse {
+export interface GetCakesResponse {
   cakes: {
     id: string
     flavor: string
