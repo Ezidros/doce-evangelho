@@ -76,7 +76,7 @@ export function AddCake({ cakeId, flavor, filling }: AddCakeProps) {
             size="sm"
             className="flex items-center gap-2 bg-violet-500 hover:bg-violet-600 w-full"
           >
-            Adicionar <Plus />
+            Atualizar quantidade <Plus />
           </Button>
         </DialogTrigger>
         <DialogContent>
