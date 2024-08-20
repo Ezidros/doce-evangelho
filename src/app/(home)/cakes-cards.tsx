@@ -1,7 +1,6 @@
 'use client'
 
 import { getCakes } from '@/http/get-cakes'
-import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -10,13 +9,11 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import { Edit } from 'lucide-react'
 import { AddCake } from './add-cake'
 import { RemoveCake } from './remove-cake'
 import { MarkCakeAsSold } from './mark-cake-as-sold'
 import { useQuery } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
-import { Progress } from '@/components/ui/progress'
+import { ButtonRedirectToUpdateCake } from './button-redirect-to-update'
 
 interface CakesCardResponse {
   cakes: {
@@ -34,41 +31,19 @@ interface CakesCardResponse {
 }
 
 export function CakesCards() {
-  const [progress, setProgress] = useState(13)
-
   const { data: cakes, isLoading: isLoadingCakes } =
     useQuery<CakesCardResponse>({
       queryKey: ['cakes'],
       queryFn: getCakes,
     })
 
-  useEffect(() => {
-    if (!isLoadingCakes) return
-
-    const steps = [13, 66, 100]
-    let currentStepIndex = 0
-
-    const timer = setInterval(() => {
-      setProgress(steps[currentStepIndex])
-      currentStepIndex = (currentStepIndex + 1) % steps.length
-    }, 500)
-
-    return () => clearInterval(timer)
-  }, [isLoadingCakes])
-
-  useEffect(() => {
-    const completeLoadingTimer = setTimeout(() => {
-      setProgress(100)
-    }, 10000)
-
-    return () => clearTimeout(completeLoadingTimer)
-  }, [])
-
   return (
     <div className="grid grid-cols-3 gap-4">
       <>
         {isLoadingCakes ? (
-          <Progress value={progress} className="w-[60%]" />
+          <div className="flex flex-col justify-center absolute right-1/2 left-1/2 items-center mt-32 gap-6">
+            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-violet-700 border-solid" />
+          </div>
         ) : (
           <>
             {cakes?.cakes.map((cake) => {
@@ -84,13 +59,7 @@ export function CakesCards() {
                   <CardContent>
                     <div className="flex flex-col gap-2">
                       <div className="flex items-center justify-between">
-                        <Button
-                          variant="ghost"
-                          className="text-violet-400 hover:text-violet-500 flex items-center gap-2"
-                        >
-                          Editar
-                          <Edit className="size-4" />
-                        </Button>
+                        <ButtonRedirectToUpdateCake cakeId={cake.id} />
 
                         <RemoveCake
                           cakeId={cake.id}
