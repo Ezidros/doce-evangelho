@@ -21,7 +21,7 @@ interface UpdateCakeProps {
     filling: string
     description: string
     quantity: number
-    price: string
+    price: number
     isSpecialFlavor: boolean | null
     isSolded: boolean | null
     createdAt: string
@@ -32,7 +32,7 @@ interface UpdateCakeProps {
 const cakeSchema = z.object({
   flavor: z.string().min(1, { message: 'Campo obrigatório' }),
   filling: z.string().min(1, { message: 'Campo obrigatório' }),
-  price: z.string().min(1, { message: 'Campo obrigatório' }),
+  price: z.coerce.number().min(1, { message: 'Campo obrigatório' }),
   quantity: z.number().nullable().optional(),
   isSolded: z.boolean().optional().default(false),
   isSpecialFlavor: z.boolean().optional().default(false),

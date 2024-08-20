@@ -10,7 +10,7 @@ import { z } from 'zod'
 const cakeSchema = z.object({
   flavor: z.string().min(1, { message: 'Campo obrigatório' }),
   filling: z.string().min(1, { message: 'Campo obrigatório' }),
-  price: z.string().min(1, { message: 'Campo obrigatório' }),
+  price: z.coerce.number().min(1, { message: 'Campo obrigatório' }),
   quantity: z.number().nullable(),
   isSolded: z.boolean().optional().default(false),
   isSpecialFlavor: z.boolean().optional().default(false),

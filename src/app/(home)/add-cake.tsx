@@ -17,6 +17,8 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
 
 interface AddCakeProps {
   cakeId: string
@@ -31,6 +33,9 @@ const addCakeSchema = z.object({
 type AddCakeFormData = z.infer<typeof addCakeSchema>
 
 export function AddCake({ cakeId, flavor, filling }: AddCakeProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const queryClient = useQueryClient()
+
   const {
     register,
     handleSubmit,
@@ -39,14 +44,22 @@ export function AddCake({ cakeId, flavor, filling }: AddCakeProps) {
     resolver: zodResolver(addCakeSchema),
   })
 
+  const { mutateAsync: addCakesFn } = useMutation({
+    mutationFn: addCakes,
+    onSuccess: () => {
+      queryClient.refetchQueries({ queryKey: ['cakes'], type: 'active' })
+    },
+  })
+
   async function addNewCake(data: AddCakeFormData) {
     const { quantity } = data
 
     try {
-      await addCakes({
+      await addCakesFn({
         cakeId,
         quantity: Number(quantity),
       })
+      setIsModalOpen(false)
 
       toast.success('Bolo adicionado com sucesso!')
     } catch (err) {
@@ -57,7 +70,7 @@ export function AddCake({ cakeId, flavor, filling }: AddCakeProps) {
 
   return (
     <>
-      <Dialog>
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogTrigger asChild>
           <Button
             size="sm"

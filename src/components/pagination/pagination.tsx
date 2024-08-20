@@ -7,9 +7,9 @@ interface PaginationProps {
   basePath: string
   orders: {
     id: string
-    amount: string
-    benefit: string
-    revenue: string
+    amount: number
+    benefit: number
+    revenue: number
     createdAt: string
     updatedAt: string
     cakeId: string

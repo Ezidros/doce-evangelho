@@ -3,9 +3,9 @@ import { api } from './api-client'
 export interface GetOrdersResponse {
   orders: {
     id: string
-    amount: string
-    benefit: string
-    revenue: string
+    amount: number
+    benefit: number
+    revenue: number
     createdAt: string
     updatedAt: string
     cakeId: string

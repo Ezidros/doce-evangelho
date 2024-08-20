@@ -7,7 +7,7 @@ export interface GetCakesResponse {
     filling: string
     description: string
     quantity: number
-    price: string
+    price: number
     isSpecialFlavor: boolean | null
     isSolded: boolean | null
     createdAt: string

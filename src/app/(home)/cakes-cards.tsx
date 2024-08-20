@@ -22,7 +22,7 @@ interface CakesCardResponse {
     filling: string
     description: string
     quantity: number
-    price: string
+    price: number
     isSpecialFlavor: boolean | null
     isSolded: boolean | null
     createdAt: string
@@ -46,49 +46,61 @@ export function CakesCards() {
           </div>
         ) : (
           <>
-            {cakes?.cakes.map((cake) => {
-              return (
-                <Card key={cake.id}>
-                  <CardHeader>
-                    <CardTitle>
-                      {cake.flavor} com {cake.filling}
-                    </CardTitle>
-                    <CardDescription>{cake.description}</CardDescription>
-                  </CardHeader>
+            {cakes?.cakes
+              .sort(
+                (a, b) =>
+                  new Date(a.createdAt).getTime() -
+                  new Date(b.createdAt).getTime(),
+              )
+              .map((cake) => {
+                return (
+                  <Card key={cake.id}>
+                    <CardHeader>
+                      <CardTitle>
+                        {cake.flavor} com {cake.filling}
+                      </CardTitle>
+                      <CardDescription>{cake.description}</CardDescription>
+                    </CardHeader>
 
-                  <CardContent>
-                    <div className="flex flex-col gap-2">
-                      <div className="flex items-center justify-between">
-                        <ButtonRedirectToUpdateCake cakeId={cake.id} />
+                    <CardContent>
+                      <div className="flex flex-col gap-2">
+                        <div className="flex items-center justify-between">
+                          <ButtonRedirectToUpdateCake cakeId={cake.id} />
 
-                        <RemoveCake
+                          <RemoveCake
+                            cakeId={cake.id}
+                            flavor={cake.flavor}
+                            filling={cake.filling}
+                          />
+                        </div>
+
+                        <Separator className="my-4" />
+
+                        <h2 className="text-lg font-bold">Informações</h2>
+
+                        <span>
+                          Preço:{' '}
+                          {new Intl.NumberFormat('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL',
+                          }).format(cake.price)}
+                        </span>
+                        <span>Quantidade disponivel: {cake.quantity}</span>
+
+                        <Separator className="my-4" />
+
+                        <AddCake
                           cakeId={cake.id}
                           flavor={cake.flavor}
                           filling={cake.filling}
                         />
+
+                        <MarkCakeAsSold cakeId={cake.id} />
                       </div>
-
-                      <Separator className="my-4" />
-
-                      <h2 className="text-lg font-bold">Informações</h2>
-
-                      <span>Preço: R$ {cake.price}</span>
-                      <span>Quantidade disponivel: {cake.quantity}</span>
-
-                      <Separator className="my-4" />
-
-                      <AddCake
-                        cakeId={cake.id}
-                        flavor={cake.flavor}
-                        filling={cake.filling}
-                      />
-
-                      <MarkCakeAsSold cakeId={cake.id} />
-                    </div>
-                  </CardContent>
-                </Card>
-              )
-            })}
+                    </CardContent>
+                  </Card>
+                )
+              })}
           </>
         )}
       </>

@@ -24,7 +24,7 @@ interface OrdersListProps {
     filling: string
     description: string
     quantity: number
-    price: string
+    price: number
     isSpecialFlavor: boolean | null
     isSolded: boolean | null
     createdAt: string
@@ -37,9 +37,9 @@ interface OrdersListProps {
 
 interface Orders {
   id: string
-  amount: string
-  benefit: string
-  revenue: string
+  amount: number
+  benefit: number
+  revenue: number
   createdAt: string
   updatedAt: string
   cakeId: string
@@ -47,8 +47,8 @@ interface Orders {
 
 export function OrdersList({ cakes, searchParams }: OrdersListProps) {
   const currentPage = parseInt(searchParams.page || '1', 8)
-  const totalPages = 3
   const [orders, setOrders] = useState<Orders[]>([])
+  const totalPages = 3
 
   useEffect(() => {
     async function fetchOrders() {
@@ -65,20 +65,6 @@ export function OrdersList({ cakes, searchParams }: OrdersListProps) {
     return {
       flavor: cake?.flavor,
       filling: cake?.filling,
-    }
-  }
-
-  function calculateBenefitAndRevenue(amount: string) {
-    const sanitizedAmount = amount.replace('R$', '').trim()
-
-    const amountNumber = parseFloat(sanitizedAmount.replace(',', '.'))
-
-    const benefit = (amountNumber * 0.4).toFixed(2).replace('.', ',')
-    const revenue = (amountNumber * 0.6).toFixed(2).replace('.', ',')
-
-    return {
-      benefit,
-      revenue,
     }
   }
 
@@ -103,12 +89,23 @@ export function OrdersList({ cakes, searchParams }: OrdersListProps) {
             orders.map((order) => {
               return (
                 <TableRow key={order.id}>
-                  <TableCell>R$ {order.amount}</TableCell>
                   <TableCell>
-                    R$ {calculateBenefitAndRevenue(order.amount).benefit}
+                    {new Intl.NumberFormat('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    }).format(order.amount)}
                   </TableCell>
                   <TableCell>
-                    R$ {calculateBenefitAndRevenue(order.amount).revenue}
+                    {new Intl.NumberFormat('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    }).format(order.benefit)}
+                  </TableCell>
+                  <TableCell>
+                    {new Intl.NumberFormat('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    }).format(order.revenue)}
                   </TableCell>
                   <TableCell>
                     {findCakeById(order.cakeId).flavor} com{' '}

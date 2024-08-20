@@ -12,7 +12,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 const cakeSchema = z.object({
   flavor: z.string().min(1, { message: 'Campo obrigatório' }),
   filling: z.string().min(1, { message: 'Campo obrigatório' }),
-  price: z.string().min(1, { message: 'Campo obrigatório' }),
+  price: z.coerce.number().min(1, { message: 'Campo obrigatório' }),
   quantity: z.number().nullable().optional(),
   isSolded: z.boolean().optional().default(false),
   isSpecialFlavor: z.boolean().optional().default(false),
@@ -81,6 +81,7 @@ export function FormCreateCake() {
       <Label>Preço</Label>
       <Input
         placeholder="Digite o preço do bolo a ser cobrado"
+        type="number"
         {...register('price')}
       />
 
