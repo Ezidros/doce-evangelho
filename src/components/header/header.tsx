@@ -33,6 +33,14 @@ export function Header() {
           </Button>
 
           <Button
+            onClick={() => router.push('/transactions')}
+            className="hover:text-violet-400"
+            variant="link"
+          >
+            Minhas compras
+          </Button>
+
+          <Button
             onClick={() => router.push('/')}
             className="mr-8 hover:text-violet-400"
             variant="link"
